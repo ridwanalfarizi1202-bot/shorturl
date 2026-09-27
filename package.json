@@ -1,0 +1,10 @@
+{
+  "name": "shorturl-vercel",
+  "private": true,
+  "type": "module",
+  "scripts": { "dev": "vercel dev" },
+  "dependencies": {
+    "@supabase/supabase-js": "latest"
+  },
+  "devDependencies": { "vercel": "latest" }
+}

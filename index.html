@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Short URL</title>
+  <style>body{font:16px system-ui;max-width:680px;margin:40px auto;padding:0 18px}input,textarea,button{box-sizing:border-box;width:100%;padding:11px;margin:6px 0 12px}button{cursor:pointer}.card{border:1px solid #ddd;border-radius:10px;padding:14px;margin:12px 0}img{max-width:220px;display:block;margin-top:8px}small{color:#666}</style>
+</head>
+<body>
+  <h1>🔗 Short URL</h1><p>Buat link pendek dengan OG preview.</p>
+  <form id="form">
+    <label>URL tujuan<input name="targetUrl" type="url" required placeholder="https://contoh.com/halaman"></label>
+    <label>OG title<input name="title" required placeholder="Judul halaman"></label>
+    <label>OG description<textarea name="description" placeholder="Deskripsi singkat"></textarea></label>
+    <label>Foto OG preview<input name="image" type="file" accept="image/jpeg,image/png,image/webp,image/gif"></label>
+    <button>Buat short URL</button>
+  </form>
+  <p id="result"></p><h2>Link terbaru</h2><div id="links">Memuat...</div>
+  <script>
+    const form=document.querySelector('#form'), result=document.querySelector('#result'), links=document.querySelector('#links');
+    async function load(){const r=await fetch('/api/links'); const data=await r.json(); links.innerHTML=data.map(x=>`<div class="card"><b>${esc(x.title)}</b><br><small>${x.clicks} klik</small><br><a href="/${x.code}">${location.origin}/${x.code}</a><br>${x.imageUrl?`<img src="${x.imageUrl}" alt="">`:''}</div>`).join('')||'<small>Belum ada link.</small>'}
+    function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+    form.onsubmit=async e=>{e.preventDefault(); result.textContent='Menyimpan...'; const r=await fetch('/api/links',{method:'POST',body:new FormData(form)}); const x=await r.json(); if(!r.ok){result.textContent=x.error;return} result.innerHTML=`Short URL: <a href="${x.shortUrl}">${x.shortUrl}</a>`; form.reset(); load()}; load();
+  </script>
+</body></html>

@@ -1,0 +1,4 @@
+shorturl.db
+uploads/
+__pycache__/
+.streamlit/
