@@ -1,9 +1,14 @@
-import 'dotenv/config';
 import express from 'express';
 import multer from 'multer';
 import crypto from 'node:crypto';
+import { fileURLToPath } from 'node:url';
+import path from 'node:path';
+import dotenv from 'dotenv';
 import { createClient } from '@supabase/supabase-js';
 import { validUrl, validSlug, parseBatch } from './src/lib.js';
+
+// Passenger cPanel menjalankan app dari cwd lain -> muat .env relatif ke file ini.
+dotenv.config({ path: path.join(path.dirname(fileURLToPath(import.meta.url)), '.env') });
 
 const { SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, PORT = 3000, BUCKET = 'og-images' } = process.env;
 if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
