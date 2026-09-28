@@ -25,28 +25,47 @@ Tes logika murni (tanpa network): `node test/lib.test.js`
 ## 3. Deploy ke DomaiNesia Nimbus Go
 
 Nimbus Go = cPanel + Node.js/NPM/PM2/SSH. Bukan serverless, jadi `vercel.json`/
-`api/` **tidak dipakai** — aplikasi ini server Express biasa.
+`api/` **tidak dipakai** — aplikasi ini server Express biasa. Repo: GitHub
+`ridwanalfarizi1202-bot/shorturl` (branch `main`).
 
-1. cPanel → **Setup Node.js App** → Create Application
-   - Node.js version: 18 atau lebih baru
-   - Application root: folder project (mis. `shorturl`)
-   - Application URL: domain/subdomain kamu
-   - Application startup file: `server.js`
-2. Upload project (Git Deploy Manager atau SFTP), **tanpa** `node_modules`.
-3. SSH ke hosting, lalu:
-   ```bash
-   cd ~/shorturl
-   cp .env.example .env && nano .env     # isi kredensial Supabase
-   npm install
-   npm run build:css
-   ```
-4. Kembali ke Setup Node.js App → **Run NPM Install** (kalau belum), lalu
-   **Restart**. Environment variable bisa juga diisi di form itu.
-5. Pastikan SSL aktif (AutoSSL cPanel) supaya link pendek jalan di `https://`.
+**A. Tarik kode (pilih salah satu)**
 
-Setiap kali `views/` atau class Tailwind diubah, jalankan `npm run build:css`
-lalu restart app. File `public/style.css` sudah di-commit jadi tidak wajib build
-di server.
+- **Git Deploy Manager** (cPanel → *Git Version Control*): clone
+  `https://github.com/ridwanalfarizi1202-bot/shorturl.git`, branch `main`.
+- **SSH**: `git clone https://github.com/.../shorturl.git ~/shorturl`
+
+**B. Buat aplikasi Node** — cPanel → **Setup Node.js App** → Create:
+
+| Field | Isi |
+|-------|-----|
+| Node.js version | 18 atau lebih baru |
+| Application root | folder hasil clone, mis. `shorturl` |
+| Application URL | domain/subdomain kamu |
+| Application startup file | `server.js` |
+
+**C. Env & install** (SSH ke hosting):
+
+```bash
+cd ~/shorturl
+cp .env.example .env && nano .env     # isi SUPABASE_URL + SERVICE_ROLE_KEY + BUCKET
+npm install --omit=dev
+```
+
+`npm run build:css` **tidak wajib** di server — `public/style.css` sudah
+di-commit. Jalankan hanya kalau kamu mengubah class Tailwind.
+
+**D. Nyalakan** — kembali ke Setup Node.js App → **Run NPM Install** (kalau
+belum) → **Restart**. Environment variable juga bisa diisi di form itu alih-alih
+`.env`.
+
+**E. SSL** — aktifkan AutoSSL cPanel supaya link jalan di `https://` (cookie
+sesi otomatis dapat flag `Secure` saat https).
+
+**Update berikutnya**: `git pull` lalu Restart app. Setiap kali `views/` atau
+class Tailwind berubah: `npm run build:css` lalu Restart.
+
+> Catatan Passenger: app harus *listen* di `PORT` dari environment — sudah
+> begitu (`app.listen(PORT)`), jadi jangan hardcode port.
 
 ## Struktur
 
