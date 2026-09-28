@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .field-label { @apply mb-1.5 block text-sm font-medium text-slate-300; }
+  .field {
+    @apply w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-slate-100
+           placeholder:text-slate-500 outline-none backdrop-blur
+           focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/40;
+  }
+  .btn {
+    @apply mt-4 w-full cursor-pointer rounded-lg border-0 bg-emerald-500 px-4 py-3 font-semibold
+           text-emerald-950 transition hover:brightness-110
+           focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
+           focus-visible:outline-white disabled:cursor-wait disabled:opacity-60;
+  }
+  .glass {
+    @apply rounded-2xl border border-white/15 bg-slate-800/40 shadow-2xl backdrop-blur-xl;
+  }
+  .tab-btn {
+    @apply flex-1 cursor-pointer rounded-lg py-2.5 text-center text-slate-300
+           transition-colors duration-200;
+  }
+}
+
+/* Tabs: CSS-only via radio + :checked. Radios must be direct children of .tabs
+   so `~` reaches .tabbar/.panel. Scoped with `>` so form inputs are never hidden. */
+.tabs > input { position: absolute; opacity: 0; pointer-events: none; }
+.panel { display: none; }
+#t1:checked ~ .tabbar label[for="t1"],
+#t2:checked ~ .tabbar label[for="t2"] { background: #22c55e; color: #06210f; }
+#t1:checked ~ #p1, #t2:checked ~ #p2 { display: block; animation: rise .28s ease; }
+.tabs > input:focus-visible ~ .tabbar label { outline: 2px solid #fff; outline-offset: 2px; }
+
+@keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+dialog::backdrop { background: rgba(2, 6, 23, .6); backdrop-filter: blur(4px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .panel { animation: none; }
+  * { transition: none !important; }
+}

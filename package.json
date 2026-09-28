@@ -1,10 +1,22 @@
 {
-  "name": "shorturl-vercel",
+  "name": "shorturl",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
-  "scripts": { "dev": "vercel dev" },
-  "dependencies": {
-    "@supabase/supabase-js": "latest"
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "build:css": "tailwindcss -i src/input.css -o public/style.css --minify",
+    "dev:css": "tailwindcss -i src/input.css -o public/style.css --watch",
+    "build": "npm run build:css",
+    "start": "node server.js"
   },
-  "devDependencies": { "vercel": "latest" }
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "multer": "^2.0.1"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.10"
+  }
 }
